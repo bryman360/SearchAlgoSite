@@ -1,0 +1,38 @@
+.grid {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.grid-cell {
+    outline: 1px solid gray;
+    width: 2.5%;
+    height: 5%;
+}
+
+.start {
+    background-color: blue;
+}
+
+.goal {
+    background-color: green;
+}
+
+.wall {
+    background-color: black;
+}
+
+.frontier {
+    background-color: red;
+}
+
+.explored {
+    background-color: slateblue;
+}
+
+.pathStep {
+    background-color: lightgreen;
+}
