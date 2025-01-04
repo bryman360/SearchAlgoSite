@@ -3,7 +3,7 @@ import Image from "next/image";
 import "../lib/styles.css";
 import Grid from "@/components/grid";
 import PlayButton from "@/components/playButton"
-import { useEffect, useState } from "react";
+import { KeyboardEvent, useState } from "react";
 import ResetButton from "@/components/resetButton";
 import AlgoDropdown from "@/components/algoDropdown";
 import { algoOptions } from "@/search-algos/algoOptions";
@@ -13,7 +13,7 @@ var intervalCounter = 0;
 
 export default function Home() {
   const [playing, setPlaying] = useState(false);
-  const [algoChoice, setAlgoChoice] = useState(2);
+  const [algoChoice, setAlgoChoice] = useState(3);
   const [stepCount, setStepCount] = useState(0);
   const [pathCount, setPathCount] = useState(0);
   const [maxMemory, setMaxMemory] = useState(0);
@@ -22,6 +22,12 @@ export default function Home() {
   
   function handleClickPlaying() {
     setPlaying(!playing);
+  }
+
+  function handleKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      setPlaying(!playing);
+    }
   }
 
   function handleAlgoChange(algoChoiceIndex: number) {
@@ -44,7 +50,7 @@ export default function Home() {
   }
 
   return (
-    <main className="h-lvh">
+    <main className="h-lvh" onKeyUp={handleKeyPress} tabIndex={0} >
       <div className="relative h-1/6 bg-slate-600 flex flex-row">
         <div className="h-full w-60 flex-row absolute bottom-0 right-0 ">
           <div className="w-full">
@@ -54,11 +60,7 @@ export default function Home() {
           <AlgoDropdown options={algoOptions} algoChoice={algoChoice} handleAlgoSelect={handleAlgoChange}/>
           </div>
           <div className="">
-                <button
-                    className=" 
-                              text-white rounded-lg"
-                    onClick={() => setModalOpen(true)}
-                >
+                <button className="text-white rounded-lg" onClick={() => setModalOpen(true)}>
                     Video Explanation
                 </button>
                 <VideoModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} algorithmName={algoOptions[algoChoice].algorithmName} algorithmVideoSrc={algoOptions[algoChoice].videoSrc} />
