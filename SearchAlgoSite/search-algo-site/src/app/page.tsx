@@ -22,12 +22,6 @@ export default function Home() {
   }
 
   function handleAlgoChange(algoChoiceIndex: number) {
-    if (algoChoiceIndex != algoChoice) {
-      console.log("New ALGO SELECTED is option", algoChoiceIndex);
-    }
-    else {
-      console.log("Same one was chosen!");
-    }
     setAlgoChoice(algoChoiceIndex);
   }
 
@@ -55,6 +49,9 @@ export default function Home() {
           </div>
           <div className="w-full">
           <AlgoDropdown options={algoOptions} algoChoice={algoChoice} handleAlgoSelect={handleAlgoChange}/>
+          </div>
+          <div className="">
+            Video Explanation
           </div>
         </div>
         <div className="h-5/6 w-32 flex items-center">

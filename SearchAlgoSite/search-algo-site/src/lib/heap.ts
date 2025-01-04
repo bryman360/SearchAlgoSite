@@ -60,10 +60,8 @@ function shiftUp(heap: Array<Array<number>>) {
     var child_i = heap.length - 1;
     var parent_i = Math.floor((child_i - 1) / 2);
 
-    console.log("SHIFTING UP");
     while (child_i > 0) {
         if (heap[child_i][0] > heap[parent_i][0]) {
-            printHeap(heap);
             return;
         }
         [heap[parent_i], heap[child_i]] = [heap[child_i], heap[parent_i]];
@@ -71,12 +69,5 @@ function shiftUp(heap: Array<Array<number>>) {
         parent_i = Math.floor((child_i - 1) / 2);
 
     }
-    printHeap(heap);
 
-}
-
-function printHeap(heap: Array<Array<number>>) {
-    for (let i=0; i < heap.length; i+=1) {
-        console.log(i + 1, heap[i])
-    }
 }
