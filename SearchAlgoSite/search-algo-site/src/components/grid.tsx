@@ -22,6 +22,7 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
     const [gridState, setGridState] = useState(initialGrid);
     const [leftMouseDownState, setLeftMouseDownState] = useState(false);
     const [rightMouseDownState, setRightMouseDownState] = useState(false);
+    const [altKeyDownState, setAltKeyDownState] = useState(false);
 
     useEffect(()=> {
         if (!playing) {
@@ -62,7 +63,12 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
                 pathCompletelyShown = true;
             }
             else {
-                gridStateCopy[lastPathStep[0]][lastPathStep[1]].state = "pathStep";
+                if (gridStateCopy[lastPathStep[0]][lastPathStep[1]].state == 'mudExplored') {
+                    gridStateCopy[lastPathStep[0]][lastPathStep[1]].state = "mudPathStep";
+                }
+                else {
+                    gridStateCopy[lastPathStep[0]][lastPathStep[1]].state = "pathStep";
+                }
                 const interval = setInterval(() => setTime(Date.now()), 25);
                 return () => {
                     clearInterval(interval);
@@ -105,6 +111,11 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
         else if (event.shiftKey) {
             changeSquareState(row, col, 'goal');
         }
+        else if (event.altKey) {
+            setLeftMouseDownState(true);
+            setAltKeyDownState(true);
+            changeSquareState(row, col, 'mud');
+        }
         else if (event.button === 0) {
             setLeftMouseDownState(true);
             changeSquareState(row, col, 'wall');
@@ -123,12 +134,18 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
         else if (event.button === 2) {
             setRightMouseDownState(false);
         }
+        setAltKeyDownState(false);
     }
 
 
     function handleSquareHover(row: number, col: number) {
         if (playing || (!leftMouseDownState && !rightMouseDownState) || (leftMouseDownState && rightMouseDownState)) return;
-        if (leftMouseDownState) {changeSquareState(row, col, 'wall');}
+        if (leftMouseDownState && !altKeyDownState) {
+            changeSquareState(row, col, 'wall');
+        }
+        else if (leftMouseDownState && altKeyDownState) {
+            changeSquareState(row, col, 'mud');
+        }
         else {changeSquareState(row, col, null);}
     }
 
@@ -180,6 +197,11 @@ function resetGridBeforePlay (gridArray: Array<Array<GridCell>>, rows: number, c
                 case('frontier'):
                 case('pathStep'):
                     state = null;
+                    break;
+                case('mudPathStep'):
+                case('mudFrontier'):
+                case('mudExplored'):
+                    state = 'mud';
                     break;
                 default:
                     state = gridArray[row][col].state;

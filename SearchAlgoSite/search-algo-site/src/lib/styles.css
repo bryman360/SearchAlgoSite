@@ -25,14 +25,30 @@
     background-color: black;
 }
 
+.mud {
+    background-color: brown;
+}
+
 .frontier {
     background-color: red;
+}
+
+.mudFrontier {
+    background-color: darkred;
 }
 
 .explored {
     background-color: slateblue;
 }
 
+.mudExplored {
+    background-color: #384550;
+}
+
 .pathStep {
     background-color: lightgreen;
+}
+
+.mudPathStep {
+    background-color: #CABA9C;
 }
