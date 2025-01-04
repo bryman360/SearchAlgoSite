@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import ResetButton from "@/components/resetButton";
 import AlgoDropdown from "@/components/algoDropdown";
 import { algoOptions } from "@/search-algos/algoOptions";
+import {VideoModal} from "@/components/videoModal";
 
 var intervalCounter = 0;
 
@@ -16,6 +17,8 @@ export default function Home() {
   const [stepCount, setStepCount] = useState(0);
   const [pathCount, setPathCount] = useState(0);
   const [maxMemory, setMaxMemory] = useState(0);
+  const [isModalOpen, setModalOpen] = useState(false);
+
   
   function handleClickPlaying() {
     setPlaying(!playing);
@@ -51,7 +54,15 @@ export default function Home() {
           <AlgoDropdown options={algoOptions} algoChoice={algoChoice} handleAlgoSelect={handleAlgoChange}/>
           </div>
           <div className="">
-            Video Explanation
+                <button
+                    className=" 
+                              text-white rounded-lg"
+                    onClick={() => setModalOpen(true)}
+                >
+                    Video Explanation
+                </button>
+                <VideoModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} algorithmName={algoOptions[algoChoice].algorithmName} algorithmVideoEmbedFunc={algoOptions[algoChoice].videoEmbedFunc} />
+
           </div>
         </div>
         <div className="h-5/6 w-32 flex items-center">
