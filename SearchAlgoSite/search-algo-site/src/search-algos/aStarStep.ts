@@ -13,12 +13,11 @@ export function aStarStep(gridState: Array<Array<GridCell>>, heap: Array<Array<n
     if (gridState[currentSquare[0]][currentSquare[1]].state == 'explored') return false;
 
     if (gridState[currentSquare[0]][currentSquare[1]].state == 'goal') {
-        console.log("GOAL FOUND!!!!");
         return true;
     }
 
     if (!currentSquare) {
-        throw Error('Trying to move through a BFS with no queue.');
+        throw Error('Trying to move through a A* with no heap.');
     }
     for(const move of moves) {
         const nextMove = [currentSquare[0] + move[0], currentSquare[1] + move[1]];

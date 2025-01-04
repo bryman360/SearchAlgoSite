@@ -15,7 +15,6 @@ export function dfsStep(gridState: Array<Array<GridCell>>, stack: Array<Array<nu
     }
     for(const move of moves) {
         const nextMove = [currentSquare[0] + move[0], currentSquare[1] + move[1]];
-        console.log("Next Move:", nextMove)
         if (nextMove[0] >= 0 &&
             nextMove[0] < gridState.length &&
             nextMove[1] >= 0 &&
@@ -25,7 +24,6 @@ export function dfsStep(gridState: Array<Array<GridCell>>, stack: Array<Array<nu
                 gridState[nextMove[0]][nextMove[1]].parentCol = currentSquare[1];
                 if (gridState[nextMove[0]][nextMove[1]].state == null) gridState[nextMove[0]][nextMove[1]].state = 'frontier';
                 stack.push(nextMove);
-                console.log("Adding", nextMove, "to the stack");
             }
     }
 

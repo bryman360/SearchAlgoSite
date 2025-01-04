@@ -69,9 +69,6 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
                 }
             }
         }
-        else {
-            console.log("GOAL AND PATH BACK FOUND!");
-        }
       })
     const cellWidthPercentage = Math.round((100 / cols) * 10) / 10;
     const cellHeightPercentage = Math.round((100 / rows) * 10) / 10;
@@ -80,14 +77,22 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
         var gridStateCopy = gridState.slice();
         if (newState == 'start') {
             gridStateCopy[startLoc[0]][startLoc[1]].state = null;
+            if (goalLoc[0] == row && goalLoc[1] == col) {
+                goalLoc = startLoc;
+                gridStateCopy[goalLoc[0]][goalLoc[1]].state = 'goal';
+            }
             startLoc = [row, col];
         }
         else if (newState == 'goal') {
             gridStateCopy[goalLoc[0]][goalLoc[1]].state = null;
+            if (startLoc[0] == row && startLoc[1] == col) {
+                startLoc = goalLoc;
+                gridStateCopy[startLoc[0]][startLoc[1]].state = 'start';
+            }
             goalLoc = [row, col];
         }
         const currentTileState = gridStateCopy[row][col].state;
-        if (currentTileState == 'start'  || currentTileState == 'goal') return;
+        if ((currentTileState == 'start' && newState != 'goal')  || (currentTileState == 'goal' && newState != 'start')) return;
         gridStateCopy[row][col].state = newState;
         setGridState(gridStateCopy);
     }

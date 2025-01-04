@@ -13,12 +13,11 @@ export function greedyBestStep(gridState: Array<Array<GridCell>>, heap: Array<Ar
     if (gridState[currentSquare[0]][currentSquare[1]].state == 'explored') return false;
 
     if (gridState[currentSquare[0]][currentSquare[1]].state == 'goal') {
-        console.log("GOAL FOUND!!!!");
         return true;
     }
 
     if (!currentSquare) {
-        throw Error('Trying to move through a BFS with no queue.');
+        throw Error('Trying to move through a Greedy Best First with no heap.');
     }
     for(const move of moves) {
         const nextMove = [currentSquare[0] + move[0], currentSquare[1] + move[1]];
@@ -31,8 +30,6 @@ export function greedyBestStep(gridState: Array<Array<GridCell>>, heap: Array<Ar
                 const heuristicValue = Math.sqrt((nextMove[0] - goalLoc[0]) ** 2 + (nextMove[1] - goalLoc[1]) ** 2);
                 gridState[nextMove[0]][nextMove[1]].parentRow = currentSquare[0];
                 gridState[nextMove[0]][nextMove[1]].parentCol = currentSquare[1];
-                // TODO: Instead of what's here and line 17, need to compare explorationCost and assign here if it is less than current value
-                //       and if it isn't, don't need to add it to the heap
                 minheap.heappush(heap, heuristicValue, nextMove[0], nextMove[1]);
             }
     }
