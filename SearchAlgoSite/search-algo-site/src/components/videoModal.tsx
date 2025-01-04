@@ -21,12 +21,12 @@ const Modal = ({ isOpen, onClose, children } : {isOpen: boolean, onClose: Functi
     );
 };
 
-export const VideoModal = ({ isOpen, onClose, algorithmName, algorithmVideoEmbedFunc }: {isOpen: boolean, onClose: Function, algorithmName: string, algorithmVideoEmbedFunc: Function}) => {
+export const VideoModal = ({ isOpen, onClose, algorithmName, algorithmVideoSrc }: {isOpen: boolean, onClose: Function, algorithmName: string, algorithmVideoSrc: string}) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-lg font-bold">{algorithmName} Video Explanation</h2>
             <div className="">
-                {algorithmVideoEmbedFunc()}
+                <iframe width="464" height="261" src={algorithmVideoSrc} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
         </Modal>
     );

@@ -61,7 +61,7 @@ export default function Home() {
                 >
                     Video Explanation
                 </button>
-                <VideoModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} algorithmName={algoOptions[algoChoice].algorithmName} algorithmVideoEmbedFunc={algoOptions[algoChoice].videoEmbedFunc} />
+                <VideoModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} algorithmName={algoOptions[algoChoice].algorithmName} algorithmVideoSrc={algoOptions[algoChoice].videoSrc} />
 
           </div>
         </div>
