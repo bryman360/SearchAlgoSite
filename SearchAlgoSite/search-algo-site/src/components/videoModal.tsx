@@ -4,7 +4,7 @@ const Modal = ({ isOpen, onClose, children } : {isOpen: boolean, onClose: Functi
     return (
         <div className="fixed inset-0 flex
                         items-center justify-center
-                        bg-black bg-opacity-50">
+                        bg-black bg-opacity-50" onClick={onClose}>
             <div className="bg-slate-600 rounded-lg
                             shadow-lg p-6 max-w-lg
                             w-full relative">
