@@ -9,7 +9,7 @@ export default function Square ({widthPercentage, heightPercentage, onSquareMous
                 onMouseUp={onSquareMouseUp}
                 onMouseOver={onSquareHover}
                 onContextMenu={(e)=>e.preventDefault()}>
-                    <Arrow symbol={symbol}/>
+                    <Arrow symbol={displaySymbol ? symbol : ""}/>
         </button>
     )
 }

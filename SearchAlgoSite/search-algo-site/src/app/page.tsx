@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image";
 import "../lib/styles.css";
 import Grid from "@/components/grid";
 import PlayButton from "@/components/playButton"
@@ -29,6 +28,9 @@ export default function Home() {
   function handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
       setPlaying(!playing);
+    }
+    else if (event.key === "i") {
+      setDisplaySymbols(!displaySymbolsEnabled);
     }
   }
 
@@ -82,14 +84,16 @@ export default function Home() {
         <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} stepCounter={stepCountIncrementer} findMaxMemory={findMaxMemory} pathCostCounter={pathCostCounter} pathLengthCounter={pathLengthCounter} displaySymbols={displaySymbolsEnabled}/>
       </div>
       <div className="h-1/6 bg-slate-900 whitespace-pre-line flex flex-row">
-        <div className="w-1/6">
+        <div className="w-1/3">
           Controls:{'\n'}
           Left Click = Set Wall{'\n'}
           Right Click = Remove Wall{'\n'}
           Ctrl + Left Click = Set Start{'\n'}
-          Ctrl + Right Click = Set Goal
+          Ctrl + Right Click = Set Goal{'\n'}
+          Enter = Start/Stop{'\n'}
+          I = Info Mode
         </div>
-        <div>
+        <div className="w-1/3">
           Stats: {'\n'}
           Algo Step Counter: {stepCount}{'\n'}
           Max Memory Allocation: {maxMemory}{'\n'}
