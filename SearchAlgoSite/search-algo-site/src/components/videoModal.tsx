@@ -29,7 +29,7 @@ export const VideoModal = ({ isOpen, onClose, algorithmName, algorithmVideoSrc }
             <h2 className="text-lg font-bold">{algorithmName} Video Explanation</h2>
             <div className="w-full h-full" style={{paddingBottom: 1.5 + "rem"}}>
                 {/* @ts-ignore: Embed came directly from YouTube. Error about frameborder is not an issue. */}
-                <iframe width="100%" height="100%" src={algorithmVideoSrc} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe width="100%" height="100%" src={algorithmVideoSrc} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="allowfullscreen"></iframe>
             </div>
         </Modal>
     );
