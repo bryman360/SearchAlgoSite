@@ -66,7 +66,7 @@ export default function Home() {
             Search Algorithm:
           </div>
           <div className="w-full">
-          <AlgoDropdown options={algoOptions} algoChoice={algoChoice} handleAlgoSelect={handleAlgoChange}/>
+          <AlgoDropdown options={algoOptions} algoChoice={algoChoice} handleAlgoSelect={handleAlgoChange} playing={playing}/>
           </div>
           <div className="">
                 <button className="text-white rounded-lg" onClick={() => setModalOpen(true)}>
