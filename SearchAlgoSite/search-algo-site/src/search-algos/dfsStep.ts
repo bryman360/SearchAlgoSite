@@ -21,6 +21,7 @@ export function dfsStep(gridState: Array<Array<GridCell>>, stack: Array<Array<nu
                 gridState[nextMove[0]][nextMove[1]].parentCol = currentSquare[1];
                 if (gridState[nextMove[0]][nextMove[1]].state == 'mud') gridState[nextMove[0]][nextMove[1]].state = 'mudFrontier';
                 else if (gridState[nextMove[0]][nextMove[1]].state == null) gridState[nextMove[0]][nextMove[1]].state = 'frontier';
+                else if (gridState[nextMove[0]][nextMove[1]].state == 'goal') return true;
                 stack.push(nextMove);
             }
     }

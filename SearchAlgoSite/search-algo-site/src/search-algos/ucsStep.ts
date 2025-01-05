@@ -2,7 +2,7 @@ import { moves } from "@/lib/common";
 import { GridCell } from "../../types";
 import * as minheap from "@/lib/heap";
 
-export function dijkstraStep(gridState: Array<Array<GridCell>>, heap: Array<Array<number>>, goalLoc: Array<number>) {
+export function ucsStep(gridState: Array<Array<GridCell>>, heap: Array<Array<number>>, goalLoc: Array<number>) {
     var heapTop = minheap.heappop(heap);
     if (heapTop == null) return;
     else if (heapTop.length == 2) {
@@ -15,7 +15,7 @@ export function dijkstraStep(gridState: Array<Array<GridCell>>, heap: Array<Arra
 
     else if (gridState[currentSquare[0]][currentSquare[1]].state == 'goal') return true;
 
-    if (!currentSquare) throw Error('Trying to move through a Dijkstra\'s with no heap.');
+    if (!currentSquare) throw Error('Trying to move through a UCS with no heap.');
     
     for(const move of moves) {
         const nextMove = [currentSquare[0] + move[0], currentSquare[1] + move[1]];
