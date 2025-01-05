@@ -13,13 +13,10 @@ export function greedyBestStep(gridState: Array<Array<GridCell>>, heap: Array<Ar
     const currentSquare = [heapTop[1], heapTop[2]];
     if (gridState[currentSquare[0]][currentSquare[1]].state == 'explored' || gridState[currentSquare[0]][currentSquare[1]].state == 'mudExplored') return false;
 
-    if (gridState[currentSquare[0]][currentSquare[1]].state == 'goal') {
-        return true;
-    }
+    if (gridState[currentSquare[0]][currentSquare[1]].state == 'goal') return true;
 
-    if (!currentSquare) {
-        throw Error('Trying to move through a Greedy Best First with no heap.');
-    }
+    if (!currentSquare) throw Error('Trying to move through a Greedy Best First with no heap.');
+    
     for(const move of moves) {
         const nextMove = [currentSquare[0] + move[0], currentSquare[1] + move[1]];
         if (nextMove[0] >= 0 &&

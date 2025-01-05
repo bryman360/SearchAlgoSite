@@ -13,12 +13,13 @@ var intervalCounter = 0;
 
 export default function Home() {
   const [playing, setPlaying] = useState(false);
-  const [algoChoice, setAlgoChoice] = useState(3);
+  const [algoChoice, setAlgoChoice] = useState(0);
   const [stepCount, setStepCount] = useState(0);
   const [pathCost, setPathCost] = useState(0);
+  const [pathLength, setPathLength] = useState(0);
   const [maxMemory, setMaxMemory] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [displaySymbolsEnabled, setDisplaySymbols] = useState(true);
+  const [displaySymbolsEnabled, setDisplaySymbols] = useState(false);
 
   
   function handleClickPlaying() {
@@ -43,6 +44,11 @@ export default function Home() {
   function pathCostCounter(countsToAdd=1, reset=false) {
     if (reset) setPathCost(0);
     else setPathCost(pathCost + countsToAdd);
+  }
+    
+  function pathLengthCounter(countsToAdd=1, reset=false) {
+    if (reset) setPathLength(0);
+    else setPathLength(pathLength + countsToAdd);
   }
 
   function findMaxMemory(currentMemorySize: number, reset=false) {
@@ -73,7 +79,7 @@ export default function Home() {
         </div>
       </div>
       <div className="h-2/3 bg-slate-400">
-        <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} stepCounter={stepCountIncrementer} findMaxMemory={findMaxMemory} pathCounter={pathCostCounter} displaySymbols={displaySymbolsEnabled}/>
+        <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} stepCounter={stepCountIncrementer} findMaxMemory={findMaxMemory} pathCostCounter={pathCostCounter} pathLengthCounter={pathLengthCounter} displaySymbols={displaySymbolsEnabled}/>
       </div>
       <div className="h-1/6 bg-slate-900 whitespace-pre-line flex flex-row">
         <div className="w-1/6">
@@ -85,9 +91,10 @@ export default function Home() {
         </div>
         <div>
           Stats: {'\n'}
-          Step Counter: {stepCount}{'\n'}
+          Algo Step Counter: {stepCount}{'\n'}
           Max Memory Allocation: {maxMemory}{'\n'}
-          Path Cost: {pathCost}
+          Path Cost: {pathCost}{'\n'}
+          Path Length: {pathLength}
         </div>
       </div>
     </main>

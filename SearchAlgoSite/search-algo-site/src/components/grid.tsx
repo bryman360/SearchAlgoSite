@@ -15,7 +15,7 @@ var pathCompletelyShown = false;
 var lastPathStep = new Array<number>();
 var arrow: string | undefined | null = null;
 
-export default function Grid ({rows, cols, playing, algoStepFunction, stepCounter, findMaxMemory, pathCounter, displaySymbols}: {rows: number, cols: number, playing: boolean, algoStepFunction: Function, stepCounter: Function, findMaxMemory: Function, pathCounter: Function, displaySymbols: boolean}) {
+export default function Grid ({rows, cols, playing, algoStepFunction, stepCounter, findMaxMemory, pathCostCounter, pathLengthCounter, displaySymbols}: {rows: number, cols: number, playing: boolean, algoStepFunction: Function, stepCounter: Function, findMaxMemory: Function, pathCostCounter: Function, pathLengthCounter: Function, displaySymbols: boolean}) {
     const [time, setTime] = useState(Date.now());
     const initialGrid = new Array<Array<GridCell>>();
     completeGridReset(initialGrid, rows, cols);
@@ -31,7 +31,8 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
             dataStructure.push(startLoc);
             if (needGridStateReset){
                 stepCounter(0, true);
-                pathCounter(0, true);
+                pathCostCounter(0, true);
+                pathLengthCounter(0, true);
                 findMaxMemory(0, true);
                 var gridStateCopy = gridState.slice();
                 resetGridBeforePlay(gridStateCopy, rows, cols);
@@ -60,8 +61,10 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
         else if (!pathCompletelyShown) {
             //@ts-ignore: Should only perform if goal found, so everything in path should always have a last path step
             [lastPathStep, arrow] = revealPathStep(gridStateCopy, lastPathStep);
-            if (gridStateCopy[lastPathStep[0]][lastPathStep[1]].state == 'mudExplored') pathCounter(2);
-            else pathCounter();
+            if (gridStateCopy[lastPathStep[0]][lastPathStep[1]].state == 'mudExplored') pathCostCounter(2);
+            else pathCostCounter();
+            pathLengthCounter();
+            
             if (lastPathStep[0] == startLoc[0] && lastPathStep[1] == startLoc[1]){
                 pathCompletelyShown = true;
             }
