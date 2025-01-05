@@ -27,7 +27,8 @@ export default function AlgoDropdown( { options, algoChoice, handleAlgoSelect } 
         <MenuItems className="absolute right-0 z-10 mt-2 w-full origin-top-middle rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             {options.map((option: {algorithmName: string, algorithmStep: Function}, index)=>{
-            return <MenuItem onClick={()=>handleAlgoSelect(index)}>
+              // @ts-ignore: Arrow function works for onClick
+            return <MenuItem key={option.algorithmName} onClick={()=>handleAlgoSelect(index)}>
               {({ focus }) => (
                 <a
                   href="#"

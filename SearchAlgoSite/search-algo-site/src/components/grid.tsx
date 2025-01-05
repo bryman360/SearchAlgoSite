@@ -30,8 +30,8 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
             dataStructure.length = 0;
             dataStructure.push(startLoc);
             if (needGridStateReset){
-                stepCounter(true);
-                pathCounter(true);
+                stepCounter(0, true);
+                pathCounter(0, true);
                 findMaxMemory(0, true);
                 var gridStateCopy = gridState.slice();
                 resetGridBeforePlay(gridStateCopy, rows, cols);
@@ -60,7 +60,8 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
         else if (!pathCompletelyShown) {
             //@ts-ignore: Should only perform if goal found, so everything in path should always have a last path step
             [lastPathStep, arrow] = revealPathStep(gridStateCopy, lastPathStep);
-            pathCounter();
+            if (gridStateCopy[lastPathStep[0]][lastPathStep[1]].state == 'mudExplored') pathCounter(2);
+            else pathCounter();
             if (lastPathStep[0] == startLoc[0] && lastPathStep[1] == startLoc[1]){
                 pathCompletelyShown = true;
             }
@@ -107,13 +108,13 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
             goalLoc = [row, col];
             gridStateCopy[goalLoc[0]][goalLoc[1]].charSymbol = 'G';
         }
-        else if (newState == 'mud') {
+        else if (newState == 'mud' && gridStateCopy[row][col].state != 'start' && gridStateCopy[row][col].state != 'goal') {
             gridStateCopy[row][col].charSymbol = '2';
         }
-        else if (newState == 'wall') {
+        else if (newState == 'wall' && gridStateCopy[row][col].state != 'start' && gridStateCopy[row][col].state != 'goal') {
             gridStateCopy[row][col].charSymbol = 'W';
         }
-        else {
+        else if (gridStateCopy[row][col].state != 'start' && gridStateCopy[row][col].state != 'goal') {
             gridStateCopy[row][col].charSymbol = '1';
         }
 
@@ -127,10 +128,10 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
 
     function handleSquareMouseDown(event: MouseEvent, row: number, col: number) {
         if (playing || leftMouseDownState || rightMouseDownState) return;
-        if (event.ctrlKey) {
+        if (event.ctrlKey && event.button === 0) {
             changeSquareState(row, col, 'start');
         }
-        else if (event.shiftKey) {
+        else if (event.ctrlKey && event.button === 2) {
             changeSquareState(row, col, 'goal');
         }
         else if (event.altKey) {

@@ -35,14 +35,14 @@ export default function Home() {
     setAlgoChoice(algoChoiceIndex);
   }
 
-  function stepCounter(reset=false) {
+  function stepCountIncrementer(countsToAdd=1, reset=false) {
     if (reset) setStepCount(0);
-    else setStepCount(stepCount + 1);
+    else setStepCount(stepCount + countsToAdd);
   }
   
-  function pathCounter(reset=false) {
+  function pathCountIncrementer(countsToAdd=1, reset=false) {
     if (reset) setPathCount(0);
-    else setPathCount(pathCount + 1);
+    else setPathCount(pathCount + countsToAdd);
   }
 
   function findMaxMemory(currentMemorySize: number, reset=false) {
@@ -73,15 +73,15 @@ export default function Home() {
         </div>
       </div>
       <div className="h-2/3 bg-slate-400">
-        <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} stepCounter={stepCounter} findMaxMemory={findMaxMemory} pathCounter={pathCounter} displaySymbols={displaySymbolsEnabled}/>
+        <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} stepCounter={stepCountIncrementer} findMaxMemory={findMaxMemory} pathCounter={pathCountIncrementer} displaySymbols={displaySymbolsEnabled}/>
       </div>
       <div className="h-1/6 bg-slate-900 whitespace-pre-line flex flex-row">
         <div className="w-1/6">
           Controls:{'\n'}
-          Left Click = Set Block{'\n'}
-          Right Click = Remove Block{'\n'}
+          Left Click = Set Wall{'\n'}
+          Right Click = Remove Wall{'\n'}
           Ctrl + Left Click = Set Start{'\n'}
-          Shift + Left Click = Set Goal
+          Ctrl + Right Click = Set Goal
         </div>
         <div>
           Stats: {'\n'}
