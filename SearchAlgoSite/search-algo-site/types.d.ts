@@ -5,4 +5,5 @@ export type GridCell = {
     parentCol: number | null;
     state: string | null;
     explorationCost: number;
+    charSymbol: string;
 }

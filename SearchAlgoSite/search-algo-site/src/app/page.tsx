@@ -18,6 +18,7 @@ export default function Home() {
   const [pathCount, setPathCount] = useState(0);
   const [maxMemory, setMaxMemory] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [displaySymbolsEnabled, setDisplaySymbols] = useState(true);
 
   
   function handleClickPlaying() {
@@ -72,7 +73,7 @@ export default function Home() {
         </div>
       </div>
       <div className="h-2/3 bg-slate-400">
-        <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} algoDataStruct={algoOptions[algoChoice].dataStructureType} stepCounter={stepCounter} findMaxMemory={findMaxMemory} pathCounter={pathCounter}/>
+        <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} stepCounter={stepCounter} findMaxMemory={findMaxMemory} pathCounter={pathCounter} displaySymbols={displaySymbolsEnabled}/>
       </div>
       <div className="h-1/6 bg-slate-900 whitespace-pre-line flex flex-row">
         <div className="w-1/6">

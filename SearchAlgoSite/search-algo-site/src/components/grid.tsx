@@ -13,8 +13,9 @@ var needGridStateReset = true;
 var goalFound: boolean | undefined = false;
 var pathCompletelyShown = false;
 var lastPathStep = new Array<number>();
+var arrow: string | undefined | null = null;
 
-export default function Grid ({rows, cols, playing, algoStepFunction, stepCounter, findMaxMemory, pathCounter}: {rows: number, cols: number, playing: boolean, algoStepFunction: Function, stepCounter: Function, findMaxMemory: Function, pathCounter: Function}) {
+export default function Grid ({rows, cols, playing, algoStepFunction, stepCounter, findMaxMemory, pathCounter, displaySymbols}: {rows: number, cols: number, playing: boolean, algoStepFunction: Function, stepCounter: Function, findMaxMemory: Function, pathCounter: Function, displaySymbols: boolean}) {
     const [time, setTime] = useState(Date.now());
     const initialGrid = new Array<Array<GridCell>>();
     completeGridReset(initialGrid, rows, cols);
@@ -38,6 +39,7 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
                 needGridStateReset = false;
             }
             goalFound = false;
+            arrow = null;
             pathCompletelyShown = false;
             return;
         }
@@ -57,7 +59,7 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
         }
         else if (!pathCompletelyShown) {
             //@ts-ignore: Should only perform if goal found, so everything in path should always have a last path step
-            lastPathStep = revealPathStep(gridStateCopy, lastPathStep);
+            [lastPathStep, arrow] = revealPathStep(gridStateCopy, lastPathStep);
             pathCounter();
             if (lastPathStep[0] == startLoc[0] && lastPathStep[1] == startLoc[1]){
                 pathCompletelyShown = true;
@@ -81,25 +83,44 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
 
     function changeSquareState(row: number, col: number, newState: string | null) {
         var gridStateCopy = gridState.slice();
+
         if (newState == 'start') {
             gridStateCopy[startLoc[0]][startLoc[1]].state = null;
             if (goalLoc[0] == row && goalLoc[1] == col) {
                 goalLoc = startLoc;
                 gridStateCopy[goalLoc[0]][goalLoc[1]].state = 'goal';
+                gridStateCopy[goalLoc[0]][goalLoc[1]].charSymbol = 'G';
             }
+            gridStateCopy[startLoc[0]][startLoc[1]].charSymbol = '1';
             startLoc = [row, col];
+            gridStateCopy[startLoc[0]][startLoc[1]].charSymbol = 'S';
         }
         else if (newState == 'goal') {
             gridStateCopy[goalLoc[0]][goalLoc[1]].state = null;
             if (startLoc[0] == row && startLoc[1] == col) {
                 startLoc = goalLoc;
                 gridStateCopy[startLoc[0]][startLoc[1]].state = 'start';
+                gridStateCopy[startLoc[0]][startLoc[1]].charSymbol = 'S';
             }
+            gridStateCopy[goalLoc[0]][goalLoc[1]].charSymbol = '1';
             goalLoc = [row, col];
+            gridStateCopy[goalLoc[0]][goalLoc[1]].charSymbol = 'G';
         }
+        else if (newState == 'mud') {
+            gridStateCopy[row][col].charSymbol = '2';
+        }
+        else if (newState == 'wall') {
+            gridStateCopy[row][col].charSymbol = 'W';
+        }
+        else {
+            gridStateCopy[row][col].charSymbol = '1';
+        }
+
         const currentTileState = gridStateCopy[row][col].state;
         if ((currentTileState == 'start' && newState != 'goal')  || (currentTileState == 'goal' && newState != 'start')) return;
+        
         gridStateCopy[row][col].state = newState;
+
         setGridState(gridStateCopy);
     }
 
@@ -154,7 +175,7 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
             {gridState.map((gridRow: Array<GridCell>, row)=>{
                 return (gridRow.map((gridCell: GridCell, col)=> {
                     //@ts-ignore: Generic MouseEvent has all we require. The larger MouseEvent has extras we don't care about.
-                    return (<Square key={'square-' + row + '-' + col} widthPercentage={cellWidthPercentage} heightPercentage={cellHeightPercentage} onSquareMouseDown={(event)=>handleSquareMouseDown(event, row, col)} onSquareMouseUp={(event)=>handleSquareMouseUp(event)} onSquareHover={()=>handleSquareHover(row, col)} state={gridCell.state} />)
+                    return (<Square key={'square-' + row + '-' + col} widthPercentage={cellWidthPercentage} heightPercentage={cellHeightPercentage} onSquareMouseDown={(event)=>handleSquareMouseDown(event, row, col)} onSquareMouseUp={(event)=>handleSquareMouseUp(event)} onSquareHover={()=>handleSquareHover(row, col)} state={gridCell.state} symbol={gridCell.charSymbol} displaySymbol={displaySymbols}></Square>)
                 }))
             })}
         </div>
@@ -168,11 +189,16 @@ function completeGridReset (gridArray: Array<Array<GridCell>>, rows: number, col
     for (let row = 0; row < rows; row++) {
         const gridRow = new Array<GridCell>()
         for (let col = 0; col < cols; col++) {
+            var displaySymbol = '1';
             if (row == startLoc[0] && col == startLoc[1]) {
                 state = "start";
                 explorationCost = 0;
+                displaySymbol = 'S';
             }
-            else if (row == goalLoc[0] && col == goalLoc[1]) state = "goal";
+            else if (row == goalLoc[0] && col == goalLoc[1]){
+                state = "goal";
+                displaySymbol = 'G';
+            }
             else state = null;
             gridRow.push({
                 row: row,
@@ -180,7 +206,8 @@ function completeGridReset (gridArray: Array<Array<GridCell>>, rows: number, col
                 parentRow: null,
                 parentCol: null,
                 state: state,
-                explorationCost: explorationCost
+                explorationCost: explorationCost,
+                charSymbol: displaySymbol
             });
         }
         gridArray.push(gridRow);
@@ -192,6 +219,7 @@ function resetGridBeforePlay (gridArray: Array<Array<GridCell>>, rows: number, c
     for (let row = 0; row < rows; row++) {
         const gridRow = new Array<GridCell>()
         for (let col = 0; col < cols; col++) {
+            var displaySymbol = '1';
             switch (gridArray[row][col].state){
                 case('explored'):
                 case('frontier'):
@@ -202,9 +230,11 @@ function resetGridBeforePlay (gridArray: Array<Array<GridCell>>, rows: number, c
                 case('mudFrontier'):
                 case('mudExplored'):
                     state = 'mud';
+                    displaySymbol = '2';
                     break;
                 default:
                     state = gridArray[row][col].state;
+                    displaySymbol = gridArray[row][col].charSymbol;
             }
             gridRow.push({
                 row: row,
@@ -212,7 +242,8 @@ function resetGridBeforePlay (gridArray: Array<Array<GridCell>>, rows: number, c
                 parentRow: null,
                 parentCol: null,
                 state: state,
-                explorationCost: 9999
+                explorationCost: 9999,
+                charSymbol: displaySymbol
             });
         }
         gridArray[row] = gridRow;

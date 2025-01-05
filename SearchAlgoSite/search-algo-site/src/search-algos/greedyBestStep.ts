@@ -3,12 +3,13 @@ import { GridCell } from "../../types";
 import * as minheap from "@/lib/heap";
 
 export function greedyBestStep(gridState: Array<Array<GridCell>>, heap: Array<Array<number>>, goalLoc: Array<number>) {
-    const heappeak = minheap.heappeak(heap);
-    if (heappeak == null) return;
-    else if (heappeak.length == 2) {
-        heap[0] = [10, ...heappeak];
+    var heapTop = minheap.heappop(heap);
+    if (heapTop == null) return;
+    else if (heapTop.length == 2) {
+        const startDistance = Math.sqrt((heapTop[0] - goalLoc[0]) ** 2 + (heapTop[1] - goalLoc[1]) ** 2)
+        heapTop = [startDistance, ...heapTop];
     }
-    const heapTop = minheap.heappop(heap);
+    
     const currentSquare = [heapTop[1], heapTop[2]];
     if (gridState[currentSquare[0]][currentSquare[1]].state == 'explored' || gridState[currentSquare[0]][currentSquare[1]].state == 'mudExplored') return false;
 

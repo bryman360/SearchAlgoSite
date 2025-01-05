@@ -1,4 +1,6 @@
-const Modal = ({ isOpen, onClose, children } : {isOpen: boolean, onClose: Function, children: any}) => {
+import { MouseEventHandler } from "react";
+
+const Modal = ({ isOpen, onClose, children } : {isOpen: boolean, onClose: MouseEventHandler, children: any}) => {
     if (!isOpen) return null;
 
     return (
@@ -21,11 +23,12 @@ const Modal = ({ isOpen, onClose, children } : {isOpen: boolean, onClose: Functi
     );
 };
 
-export const VideoModal = ({ isOpen, onClose, algorithmName, algorithmVideoSrc }: {isOpen: boolean, onClose: Function, algorithmName: string, algorithmVideoSrc: string}) => {
+export const VideoModal = ({ isOpen, onClose, algorithmName, algorithmVideoSrc }: {isOpen: boolean, onClose: MouseEventHandler, algorithmName: string, algorithmVideoSrc: string}) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2 className="text-lg font-bold">{algorithmName} Video Explanation</h2>
             <div className="w-full h-full" style={{paddingBottom: 1.5 + "rem"}}>
+                {/* @ts-ignore: Embed came directly from YouTube. Error about frameborder is not an issue. */}
                 <iframe width="100%" height="100%" src={algorithmVideoSrc} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
         </Modal>
