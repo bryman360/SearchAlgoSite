@@ -71,6 +71,7 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
                 else {
                     gridStateCopy[lastPathStep[0]][lastPathStep[1]].state = "pathStep";
                 }
+                if (arrow) gridStateCopy[lastPathStep[0]][lastPathStep[1]].charSymbol = arrow;
                 const interval = setInterval(() => setTime(Date.now()), 25);
                 return () => {
                     clearInterval(interval);

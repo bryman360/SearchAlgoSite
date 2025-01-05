@@ -2,10 +2,6 @@ import { MouseEventHandler } from "react";
 import "../lib/styles.css";
 
 export default function Square ({widthPercentage, heightPercentage, onSquareMouseDown, onSquareMouseUp, onSquareHover, state, symbol, displaySymbol} : {widthPercentage: number, heightPercentage: number, onSquareMouseDown: MouseEventHandler, onSquareMouseUp: MouseEventHandler, onSquareHover: MouseEventHandler, state: string | null, symbol: string, displaySymbol: boolean}) {
-    if (symbol == 'up') symbol = '&uarr;';
-    else if (symbol == 'left') symbol = '&larr;';
-    else if (symbol == "down") symbol = '&darr;';
-    else if (symbol == 'right') symbol = '&rarr;';
     
     return (
         <button className={"grid-cell " + (state ? state : "")} 
@@ -13,7 +9,24 @@ export default function Square ({widthPercentage, heightPercentage, onSquareMous
                 onMouseUp={onSquareMouseUp}
                 onMouseOver={onSquareHover}
                 onContextMenu={(e)=>e.preventDefault()}>
-                    {displaySymbol ? symbol : ""}
+                    <Arrow symbol={symbol}/>
         </button>
     )
+}
+
+function Arrow({symbol}: {symbol: string}) {
+    if (symbol == "left") {
+        return (<div className="text-black">&larr;</div>)
+    }
+    else if (symbol == "right") {
+        return (<div className="text-black">&rarr;</div>)
+    }
+    else if (symbol == "up") {
+        return (<div className="text-black">&uarr;</div>)
+    }
+    else if (symbol == "down") {
+        return (<div className="text-black">&darr;</div>)
+    }
+    
+    else return (<>{symbol}</>)
 }
