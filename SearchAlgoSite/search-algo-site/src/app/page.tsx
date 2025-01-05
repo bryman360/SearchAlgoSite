@@ -19,9 +19,11 @@ export default function Home() {
   const [maxMemory, setMaxMemory] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
   const [displaySymbolsEnabled, setDisplaySymbols] = useState(false);
+  const [previousStats, setPreviousStats] = useState(["None", 0, 0, 0, 0])
 
   
   function handleClickPlaying() {
+    if (playing) storePreviousRun();
     setPlaying(!playing);
   }
 
@@ -56,6 +58,10 @@ export default function Home() {
   function findMaxMemory(currentMemorySize: number, reset=false) {
     if (reset) setMaxMemory(0);
     else setMaxMemory(maxMemory >= currentMemorySize ? maxMemory : currentMemorySize);
+  }
+
+  function storePreviousRun() {
+    setPreviousStats([algoOptions[algoChoice].algorithmName, stepCount, maxMemory, pathCost, pathLength]);
   }
 
   return (
@@ -94,11 +100,19 @@ export default function Home() {
           I = Info Mode
         </div>
         <div className="w-1/3">
-          Stats: {'\n'}
+          Current Run Stats: {'\n'}
           Algo Step Counter: {stepCount}{'\n'}
           Max Memory Allocation: {maxMemory}{'\n'}
           Path Cost: {pathCost}{'\n'}
           Path Length: {pathLength}
+        </div>
+        <div className="w-1/3">
+          Previous Run Stats: {'\n'}
+          Algorithm Chosen: {previousStats[0]}{'\n'}
+          Algo Step Counter: {previousStats[1]}{'\n'}
+          Max Memory Allocation: {previousStats[2]}{'\n'}
+          Path Cost: {previousStats[3]}{'\n'}
+          Path Length: {previousStats[4]}
         </div>
       </div>
     </main>
