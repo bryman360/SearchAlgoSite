@@ -2,7 +2,7 @@ import { moves } from "@/lib/common";
 import { GridCell } from "../../types";
 import * as minheap from "@/lib/heap";
 
-export function aStarStep(gridState: Array<Array<GridCell>>, heap: Array<Array<number>>, goalLoc: Array<number>) {
+export function dijkstraStep(gridState: Array<Array<GridCell>>, heap: Array<Array<number>>, goalLoc: Array<number>) {
     var heapTop = minheap.heappop(heap);
     if (heapTop == null) return;
     else if (heapTop.length == 2) {
@@ -15,7 +15,7 @@ export function aStarStep(gridState: Array<Array<GridCell>>, heap: Array<Array<n
 
     else if (gridState[currentSquare[0]][currentSquare[1]].state == 'goal') return true;
 
-    if (!currentSquare) throw Error('Trying to move through a A* with no heap.');
+    if (!currentSquare) throw Error('Trying to move through a Dijkstra\'s with no heap.');
     
     for(const move of moves) {
         const nextMove = [currentSquare[0] + move[0], currentSquare[1] + move[1]];
@@ -30,11 +30,9 @@ export function aStarStep(gridState: Array<Array<GridCell>>, heap: Array<Array<n
                 
                 if (gridState[currentSquare[0]][currentSquare[1]].state == 'mudFrontier') spaceCost = 2;
 
-                const heuristicValue = Math.abs((nextMove[0] - goalLoc[0])) + Math.abs(nextMove[1] - goalLoc[1]);
                 const parentCost = heapTop[0];
-                const parentHeuristicValue = Math.abs(currentSquare[0] - goalLoc[0]) + Math.abs(currentSquare[1] - goalLoc[1]);
-                if (gridState[nextMove[0]][nextMove[1]].explorationCost > parentCost - parentHeuristicValue + spaceCost + heuristicValue) {
-                    gridState[nextMove[0]][nextMove[1]].explorationCost = parentCost - parentHeuristicValue + spaceCost + heuristicValue;
+                if (gridState[nextMove[0]][nextMove[1]].explorationCost > parentCost + spaceCost) {
+                    gridState[nextMove[0]][nextMove[1]].explorationCost = parentCost + spaceCost;
                     gridState[nextMove[0]][nextMove[1]].parentRow = currentSquare[0];
                     gridState[nextMove[0]][nextMove[1]].parentCol = currentSquare[1];
                 }
