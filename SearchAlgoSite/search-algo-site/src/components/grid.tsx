@@ -15,7 +15,7 @@ var pathCompletelyShown = false;
 var lastPathStep = new Array<number>();
 var arrow: string | undefined | null = null;
 
-export default function Grid ({rows, cols, playing, algoStepFunction, stepCounter, findMaxMemory, pathCostCounter, pathLengthCounter, displaySymbols}: {rows: number, cols: number, playing: boolean, algoStepFunction: Function, stepCounter: Function, findMaxMemory: Function, pathCostCounter: Function, pathLengthCounter: Function, displaySymbols: boolean}) {
+export default function Grid ({rows, cols, playing, algoStepFunction, stepCounter, findMaxMemory, pathCostCounter, pathLengthCounter, displaySymbols, randomize, resetRandomize}: {rows: number, cols: number, playing: boolean, algoStepFunction: Function, stepCounter: Function, findMaxMemory: Function, pathCostCounter: Function, pathLengthCounter: Function, displaySymbols: boolean, randomize: boolean, resetRandomize: Function}) {
     const [time, setTime] = useState(Date.now());
     const initialGrid = new Array<Array<GridCell>>();
     completeGridReset(initialGrid, rows, cols);
@@ -35,7 +35,9 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
                 pathLengthCounter(0, true);
                 findMaxMemory(0, true);
                 var gridStateCopy = gridState.slice();
-                resetGridBeforePlay(gridStateCopy, rows, cols);
+                resetGridBeforePlay(gridStateCopy, rows, cols, randomize);
+                if (randomize) resetRandomize();
+
                 setGridState(gridStateCopy);
                 needGridStateReset = false;
             }
@@ -64,7 +66,7 @@ export default function Grid ({rows, cols, playing, algoStepFunction, stepCounte
             if (gridStateCopy[lastPathStep[0]][lastPathStep[1]].state == 'mudExplored') pathCostCounter(2);
             else pathCostCounter();
             pathLengthCounter();
-            
+
             if (lastPathStep[0] == startLoc[0] && lastPathStep[1] == startLoc[1]){
                 pathCompletelyShown = true;
             }
@@ -219,12 +221,37 @@ function completeGridReset (gridArray: Array<Array<GridCell>>, rows: number, col
     }
 }
 
-function resetGridBeforePlay (gridArray: Array<Array<GridCell>>, rows: number, cols: number) {
+function resetGridBeforePlay (gridArray: Array<Array<GridCell>>, rows: number, cols: number, randomize: boolean) {
     var state = null;
+    console.log("Randomize:", randomize);
+    if (randomize) {
+        startLoc = [Math.floor(Math.random() * rows), Math.floor(Math.random() * cols)];
+        goalLoc = [Math.floor(Math.random() * rows), Math.floor(Math.random() * cols)];
+        // while (goalLoc == startLoc) {goalLoc = [Math.floor(Math.random() * rows), Math.floor(Math.random() * cols)];}
+        gridArray[startLoc[0]][startLoc[1]].state = 'start';
+        gridArray[goalLoc[0]][goalLoc[1]].state = 'goal';
+    }
     for (let row = 0; row < rows; row++) {
         const gridRow = new Array<GridCell>()
         for (let col = 0; col < cols; col++) {
             var displaySymbol = '1';
+            if (randomize) {
+                if (!((row == startLoc[0] && col == startLoc[1]) || (row == goalLoc[0] && col == goalLoc[1]))) {
+                    const randomStateChoice = Math.random();
+                    if (randomStateChoice < .2) {
+                        gridArray[row][col].state = 'wall';
+                        gridArray[row][col].charSymbol = 'W';
+                    }
+                    else if (randomStateChoice < .5) {
+                        gridArray[row][col].state = 'mud';
+                        gridArray[row][col].charSymbol = '2';
+                    }
+                    else {
+                        gridArray[row][col].state = null;
+                        gridArray[row][col].charSymbol = '1';
+                    }
+                }
+            }
             switch (gridArray[row][col].state){
                 case('explored'):
                 case('frontier'):
@@ -236,6 +263,15 @@ function resetGridBeforePlay (gridArray: Array<Array<GridCell>>, rows: number, c
                 case('mudExplored'):
                     state = 'mud';
                     displaySymbol = '2';
+                    break;
+                case('start'):
+                    state = gridArray[row][col].state;
+                    displaySymbol = 'S'
+                    break;
+                case('goal'):
+                    console.log("Goal at", row, col);
+                    state = gridArray[row][col].state;
+                    displaySymbol = 'G'
                     break;
                 default:
                     state = gridArray[row][col].state;

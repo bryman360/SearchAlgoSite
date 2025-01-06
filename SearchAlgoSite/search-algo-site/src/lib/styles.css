@@ -52,3 +52,9 @@
 .mudPathStep {
     background-color: #CABA9C;
 }
+
+.button-icon {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}

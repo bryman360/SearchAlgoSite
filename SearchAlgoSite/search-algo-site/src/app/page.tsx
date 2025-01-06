@@ -7,6 +7,7 @@ import ResetButton from "@/components/resetButton";
 import AlgoDropdown from "@/components/algoDropdown";
 import { algoOptions } from "@/search-algos/algoOptions";
 import {VideoModal} from "@/components/videoModal";
+import RandomizeButton from "@/components/randomizeButton";
 
 var intervalCounter = 0;
 
@@ -19,7 +20,8 @@ export default function Home() {
   const [maxMemory, setMaxMemory] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
   const [displaySymbolsEnabled, setDisplaySymbols] = useState(false);
-  const [previousStats, setPreviousStats] = useState(["None", 0, 0, 0, 0])
+  const [previousStats, setPreviousStats] = useState(["None", 0, 0, 0, 0]);
+  const [randomizeGrid, setRandomizeGrid] = useState(false);
 
   
   function handleClickPlaying() {
@@ -64,6 +66,10 @@ export default function Home() {
     setPreviousStats([algoOptions[algoChoice].algorithmName, stepCount, maxMemory, pathCost, pathLength]);
   }
 
+  function handleClickRandomize() {
+    setRandomizeGrid(!randomizeGrid);
+  }
+
   return (
     <main className="h-lvh" onKeyUp={handleKeyPress} tabIndex={0} >
       <div className="relative h-1/6 bg-slate-600 flex flex-row">
@@ -85,9 +91,12 @@ export default function Home() {
         <div className="h-5/6 w-32 flex items-center">
           <PlayButton onPlayButtonClick={handleClickPlaying} playing={playing} />
         </div>
+        <div className="h-5/6 w-32 flex items-center">
+          <RandomizeButton onRandomizeButtonClick={handleClickRandomize} />
+        </div>
       </div>
       <div className="h-2/3 bg-slate-400">
-        <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} stepCounter={stepCountIncrementer} findMaxMemory={findMaxMemory} pathCostCounter={pathCostCounter} pathLengthCounter={pathLengthCounter} displaySymbols={displaySymbolsEnabled}/>
+        <Grid rows={20} cols={40} playing={playing} algoStepFunction={algoOptions[algoChoice].algorithmStep} stepCounter={stepCountIncrementer} findMaxMemory={findMaxMemory} pathCostCounter={pathCostCounter} pathLengthCounter={pathLengthCounter} displaySymbols={displaySymbolsEnabled} randomize={randomizeGrid} resetRandomize={handleClickRandomize}/>
       </div>
       <div className="h-1/6 bg-slate-900 whitespace-pre-line flex flex-row">
         <div className="w-1/3">
